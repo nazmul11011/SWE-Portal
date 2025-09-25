@@ -174,7 +174,7 @@ export default async function StudentPage({ params }: PageProps) {
                   <p className="text-sm font-medium text-gray-500">Skills</p>
                   <p>
                     {student.skills?.length
-                      ? student.skills.map((s: { skill: { name: any; }; }) => s.skill.name).join(", ")
+                      ? student.skills.map((s: { skill: { name: string; }; }) => s.skill.name).join(", ")
                       : "N/A"}
                   </p>
                 </div>

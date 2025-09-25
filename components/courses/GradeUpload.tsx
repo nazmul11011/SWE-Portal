@@ -30,7 +30,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input";
 import Papa from "papaparse";
 import { toast } from "sonner";
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function EnrollmentClient({ courses, user }: { courses: any[], user: any }) {
   const [selectedSemester, setSelectedSemester] = React.useState<string | undefined>(undefined);
   const [selectedCourse, setSelectedCourse] = React.useState("");
@@ -49,7 +49,9 @@ export default function EnrollmentClient({ courses, user }: { courses: any[], us
     Papa.parse(file, {
       header: true,
       skipEmptyLines: true,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       complete: (results: { data: any[] }) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const data = results.data as any[];
         const parsed = data
           .filter(row => row.regNo && row.grade)

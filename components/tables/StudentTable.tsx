@@ -68,7 +68,6 @@ export default function StudentTable({ rows }: { rows: StudentRow[] }) {
 	}
 
 	function onDeleteSelected() {
-		// eslint-disable-next-line no-console
 		console.log("Delete selected:", Array.from(selectedIds));
 		setSelectedIds(new Set());
 	}

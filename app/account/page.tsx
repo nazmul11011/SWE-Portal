@@ -59,7 +59,7 @@ export default async function AccountPage() {
     if (!user) return <div className="p-6">User not found</div>
 
     const skillList = await getSkills()
-
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const userSkillIds = user.skills.map((s: { skillId: any }) => s.skillId)
 
     return (

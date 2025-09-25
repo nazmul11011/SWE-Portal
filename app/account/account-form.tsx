@@ -38,6 +38,7 @@ export default function AccountForm({
     user,
     skillList,
 }: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     user: any
     skillList: { id: string; name: string }[]
 }) {

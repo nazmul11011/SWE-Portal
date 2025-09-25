@@ -28,9 +28,8 @@ function parseCsv(content: string): CsvUser[] {
     gender: header.indexOf("gender"),
     phonenumber: header.indexOf("mobile"),
   } as const;
-  const requiredMissing = ["regno", "email", "session"].filter(
-    (k) => (indices as any)[k] === -1
-  );
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const requiredMissing = ["regno", "email", "session"].filter((k) => (indices as any)[k] === -1);
   if (requiredMissing.length > 0) {
     throw new Error(
       `Missing required columns: ${requiredMissing
@@ -83,7 +82,9 @@ export default function CsvImportUsers() {
     try {
       const parsed = parseCsv(text);
       setRows(parsed);
-    } catch (e: any) {
+    } 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    catch (e: any) {
       setError(e?.message || "Failed to parse CSV");
       setRows([]);
     }
@@ -104,7 +105,9 @@ export default function CsvImportUsers() {
       setResultMsg(
         `Imported ${data?.created ?? 0}. Skipped ${data?.skipped ?? 0}. Errors: ${data?.errors?.length ?? 0}.`
       );
-    } catch (e: any) {
+    } 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    catch (e: any) {
       setError(e?.message || "Upload failed");
     } finally {
       setIsUploading(false);
@@ -147,7 +150,7 @@ export default function CsvImportUsers() {
       )}
       <Separator />
       <div className="text-sm text-muted-foreground">
-        Required headers: regNo, email, session. Optional: name, gender, phoneNumber. Role defaults to "student".
+        Required headers: regNo, email, session. Optional: name, gender, phoneNumber. Role defaults to &quot;student&quot;.
       </div>
       {hasData && (
         <div className="rounded-md border overflow-auto">
@@ -222,7 +225,9 @@ export default function CsvImportUsers() {
                 setMRegNo("");
                 setMEmail("");
                 setMSession("");
-              } catch (e: any) {
+              } 
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              catch (e: any) {
                 setMError(e?.message || "Failed");
               } finally {
                 setMLoading(false);

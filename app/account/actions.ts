@@ -13,7 +13,7 @@ cloudinary.v2.config({
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 })
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function updateAccount(data: any, file?: File) {
   const userId = data.userId
   if (!userId) throw new Error("Unauthorized: No user ID provided")
@@ -36,7 +36,7 @@ export async function updateAccount(data: any, file?: File) {
           else resolve(result!)
         }
       )
-
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { PassThrough } = require("stream")
       const bufferStream = new PassThrough()
       bufferStream.end(buffer)

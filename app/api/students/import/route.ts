@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
             regNo: u.regNo,
             fullName,
             nickName: fullName,
-            gender: (u.gender || "Male") as any,
+            gender: (u.gender || "Male"),
             email: u.email,
             phoneNumber: u.phoneNumber,
             session: u.session,
@@ -57,7 +57,9 @@ export async function POST(req: NextRequest) {
           },
         });
         created++;
-      } catch (e: any) {
+      } 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      catch (e: any) {
         errors.push({ regNo: u.regNo, error: e?.message || "unknown error" });
       }
     }
@@ -66,12 +68,12 @@ export async function POST(req: NextRequest) {
       JSON.stringify({ created, skipped, errors }),
       { status: 200, headers: { "Content-Type": "application/json" } }
     );
-  } catch (e: any) {
+  } 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  catch (e: any) {
     return new Response(JSON.stringify({ error: e?.message || "Invalid payload" }), {
       status: 400,
       headers: { "Content-Type": "application/json" },
     });
   }
 }
-
-
