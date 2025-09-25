@@ -1,0 +1,122 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  regNo        String   @unique
+  fullName     String?
+  nickName     String?
+  gender       String?
+  email        String   @unique
+  profilePic   String?
+  bio          String?
+  session      String?
+  phoneNumber  String?
+  linkedinId   String?
+  githubId     String?
+  codeforcesId String?
+  whatsapp     String?
+  facebook     String?
+  bloodGroup   String?
+  school       String?
+  college      String?
+  hometown     String?
+  password     String
+  roleId       String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // relations
+  student     Student?
+  role        Role         @relation(fields: [roleId], references: [id])
+  skills      UserSkill[] 
+  enrollments Enrollment[]
+  orpsMarks   ORPS_Marks[]
+  passwordReset   PasswordReset[]
+}
+
+model PasswordReset {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  otp       String
+  expiresAt DateTime
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Role {
+  id         String @id @default(cuid())
+  name       String @unique
+  permission Int    @default(1)
+  users      User[]
+}
+
+model Student {
+  id              String       @id @default(cuid())
+  userId          String       @unique
+  semester        Int?
+  cgpa            Float
+  creditCompleted Int
+  user            User         @relation(fields: [userId], references: [id])
+}
+
+model Course {
+  id          String       @id @default(cuid())
+  code        String
+  title       String
+  credit      Float
+  semester    Int
+  enrollments Enrollment[]
+  orpsMarks   ORPS_Marks[]
+}
+
+model Enrollment {
+  id       String  @id @default(cuid())
+  userId   String
+  courseId String
+  grade    String?
+
+  user   User   @relation(fields: [userId], references: [id])
+  course Course @relation(fields: [courseId], references: [id])
+
+  @@unique([userId, courseId], name: "userId_courseId")
+}
+
+model Skill {
+  id    String      @id @default(cuid())
+  name  String      @unique
+  users UserSkill[]
+}
+
+model UserSkill {
+  id      String @id @default(cuid())
+  userId  String
+  skillId String
+
+  user  User  @relation(fields: [userId], references: [id])
+  skill Skill @relation(fields: [skillId], references: [id])
+
+  @@unique([userId, skillId])
+}
+
+model ORPS_Marks {
+  id         String   @id @default(cuid())
+  userId  String
+  courseId   String
+  attendance Int
+  classCount Int
+  termTest   Int
+  evaluation Int?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+  course  Course  @relation(fields: [courseId], references: [id])
+
+  @@unique([userId, courseId])
+}
