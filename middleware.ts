@@ -1,23 +1,42 @@
 // middleware.ts
-import { NextRequest, NextResponse } from "next/server";
-import { getToken } from "next-auth/jwt";
+import { NextResponse } from "next/server"
+import type { NextRequest } from "next/server"
+import { getToken } from "next-auth/jwt"
+
+const protectedRoutes = [
+  { url: "/students/add", minPermission: 5 },
+  { url: "/students", minPermission: 5 },
+  { url: "/courses", minPermission: 3 },
+  { url: "/courses/gradeupdate", minPermission: 3 },
+  { url: "/courses/marks-update", minPermission: 3 },
+  { url: "/courses/cgpaupdate", minPermission: 3 },
+  { url: "/info-update", minPermission: 2 },
+  { url: "/account", minPermission: 1 },
+  { url: "/account/change-password", minPermission: 1 },
+]
 
 export async function middleware(req: NextRequest) {
-  // Get JWT token from NextAuth
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+  const token = await getToken({ req })
 
-  // If token does not exist, redirect to sign-in page
-  if (!token) {
-    const url = req.nextUrl.clone();
-    url.pathname = "/auth/signin";
-    return NextResponse.redirect(url);
+  // Convert role to a number safely (default = 0 if not set)
+  const userPermission = token?.permission ?? 0
+
+  const pathname = req.nextUrl.pathname
+
+  const matched = protectedRoutes.find((r) => pathname.startsWith(r.url))
+
+  if (matched && userPermission < matched.minPermission) {
+    return NextResponse.redirect(new URL("/unauthorized", req.url))
   }
 
-  // Session exists, allow access
-  return NextResponse.next();
+  return NextResponse.next()
 }
 
-// Paths where middleware should run
 export const config = {
-  matcher: ["/students/:path*", "/admin/:path*", "/super-admin/:path*"],
-};
+  matcher: [
+    "/students/:path*",
+    "/courses/:path*",
+    "/info-update",
+    "/account/:path*",
+  ],
+}

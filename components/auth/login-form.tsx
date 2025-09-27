@@ -18,29 +18,38 @@ type LoginFormValues = {
 export function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
   const { register, handleSubmit } = useForm<LoginFormValues>();
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false); // <-- Loading state
   const router = useRouter();
 
   const onSubmit = async (data: LoginFormValues) => {
     setError("");
+    setLoading(true);
 
-    const result = await signIn("credentials", {
-      redirect: false,
-      regNo: data.regNo,
-      password: data.password,
-    });
+    try {
+      const result = await signIn("credentials", {
+        redirect: false,
+        regNo: data.regNo,
+        password: data.password,
+      });
 
-    if (result?.error) {
-      setError("Invalid registration number or password");
-      return;
-    }
+      if (result?.error) {
+        setError("Invalid registration number or password");
+        setLoading(false);
+        return;
+      }
 
-    const session = await getSession();
-    const userId = session?.user?.id;
+      const session = await getSession();
+      const userId = session?.user?.id;
 
-    if (userId) {
-      router.push('/dashboard');
-    } else {
-      setError("Could not retrieve user session");
+      if (userId) {
+        router.push("/dashboard");
+      } else {
+        setError("Could not retrieve user session");
+        setLoading(false);
+      }
+    } catch (err) {
+      setError("An unexpected error occurred");
+      setLoading(false);
     }
   };
 
@@ -81,8 +90,8 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
               />
             </div>
             {error && <p className="text-red-500 text-sm">{error}</p>}
-            <Button type="submit" className="w-full mt-2">
-              Login
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "Logging In..." : "Login"}
             </Button>
           </form>
         </CardContent>

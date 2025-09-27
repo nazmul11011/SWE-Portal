@@ -38,12 +38,21 @@ export function AppSidebar({
     {
       title: "Users",
       url: '#',
-      icon: SquareTerminal,
+      icon: Users,
       items: [
         { title: "Add", url: "/students/add" },
         { title: "Lists", url: "/students" },
       ],
       minPermission: 5, // only admins and super-admins
+    },
+    {
+      title: "Student Info",
+      url: '#',
+      icon: SquareTerminal,
+      items: [
+        { title: "Update", url: "/info-update" },
+      ],
+      minPermission: 2, // only collector
     },
     {
       title: "Courses",

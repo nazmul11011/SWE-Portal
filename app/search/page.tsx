@@ -21,6 +21,7 @@ import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Github, Linkedin, Facebook } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   searchParams?: { search?: string };
@@ -41,28 +42,28 @@ export default async function SearchUserPage({ searchParams }: Props) {
   // Only fetch users if search query exists
   const users = searchQuery
     ? await prisma.user.findMany({
-        where: {
-          OR: [
-            { fullName: { contains: searchQuery, mode: "insensitive" } },
-            { nickName: { contains: searchQuery, mode: "insensitive" } },
-            { regNo: { contains: searchQuery, mode: "insensitive" } },
-          ],
-        },
-        select: {
-          id: true,
-          regNo: true,
-          fullName: true,
-          nickName: true,
-          profilePic: true,
-          session: true,
-          bloodGroup: true,
-          hometown: true,
-          facebook: true,
-          githubId: true,
-          linkedinId: true,
-        },
-        orderBy: { regNo: "asc" },
-      })
+      where: {
+        OR: [
+          { fullName: { contains: searchQuery, mode: "insensitive" } },
+          { nickName: { contains: searchQuery, mode: "insensitive" } },
+          { regNo: { contains: searchQuery, mode: "insensitive" } },
+        ],
+      },
+      select: {
+        id: true,
+        regNo: true,
+        fullName: true,
+        nickName: true,
+        profilePic: true,
+        session: true,
+        bloodGroup: true,
+        hometown: true,
+        facebook: true,
+        githubId: true,
+        linkedinId: true,
+      },
+      orderBy: { regNo: "asc" },
+    })
     : [];
 
   return (
@@ -80,8 +81,8 @@ export default async function SearchUserPage({ searchParams }: Props) {
         {/* Header */}
         <header className="flex justify-between h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
           <div className="flex items-center gap-2 px-4">
-            <SidebarTrigger/>
-            <Separator orientation="vertical"/>
+            <SidebarTrigger />
+            <Separator orientation="vertical" />
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
@@ -108,17 +109,21 @@ export default async function SearchUserPage({ searchParams }: Props) {
 
             <CardContent>
               {/* Search Input (SSR, GET form) */}
-              <form method="get" className="mb-4">
+              <form method="get" className="mb-4 flex gap-2">
                 <Input
                   name="search"
                   placeholder="Search by name or reg no..."
                   defaultValue={searchParams?.search ?? ""}
+                  className="flex-1"
                 />
+                <Button type="submit" variant="default">
+                  Search
+                </Button>
               </form>
 
               {/* Results Table */}
               {searchQuery && users.length > 0 ? (
-                <Table className="mt-4">
+                <Table>
                   <TableHeader>
                     <TableRow>
                       <TableHead>Name</TableHead>
