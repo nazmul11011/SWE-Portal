@@ -64,7 +64,7 @@ export default async function DashboardPage() {
         {/* Main Content */}
         <main className="flex flex-1 flex-col items-center gap-2 p-4 pt-0">
           {/* Student Card */}
-          <Card className="w-full max-w-5xl rounded-sm shadow-sm mt-4">
+          <Card className="max-w-5xl rounded-sm shadow-sm mt-4">
             <CardHeader>
               <CardTitle>
                 Information

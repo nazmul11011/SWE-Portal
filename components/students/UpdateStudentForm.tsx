@@ -13,9 +13,9 @@ import Image from "next/image";
 import { findStudent, updateStudentInfo } from "@/app/info-update/actions";
 
 const schema = z.object({
-  linkedin: z.string().url().optional(),
-  github: z.string().url().optional(),
-  facebook: z.string().url().optional(),
+  linkedin: z.string().optional(),
+  github: z.string().optional(),
+  facebook: z.string().optional(),
   profilePic: z.any().optional(),
 });
 
@@ -57,7 +57,7 @@ export default function UpdateStudentPage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-4xl space-y-6">
       {/* Search Section */}
       <div className="flex gap-2">
         <Input
@@ -65,16 +65,16 @@ export default function UpdateStudentPage() {
           value={searchRegNo}
           onChange={(e) => setSearchRegNo(e.target.value)}
         />
-        <Button onClick={handleSearch} disabled={isPending}>
+        <Button onClick={handleSearch} disabled={isPending} type="submit">
           {isPending ? "Searching..." : "Search"}
         </Button>
       </div>
 
       {/* Update Section */}
       {student && (
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-2 gap-4">
           {/* Current Info */}
-          <Card className="p-4">
+          <Card className="p-4 rounded-md">
             <CardTitle>Current Info</CardTitle>
             <CardContent className="flex flex-col items-center gap-4">
               <Image
@@ -97,7 +97,7 @@ export default function UpdateStudentPage() {
                 </p>
                 <p>
                   <span className="font-medium">Facebook:</span>{" "}
-                  {student.facebookId || "Not set"}
+                  {student.facebook || "Not set"}
                 </p>
               </div>
             </CardContent>
@@ -134,7 +134,7 @@ export default function UpdateStudentPage() {
             <div>
               <Label className="mb-2">Facebook</Label>
               <Input
-                placeholder={student.facebookId || "https://facebook.com/username"}
+                placeholder={student.facebook || "https://facebook.com/username"}
                 {...form.register("facebook")}
               />
             </div>
