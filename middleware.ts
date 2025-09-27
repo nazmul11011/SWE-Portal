@@ -1,6 +1,5 @@
 // middleware.ts
-import { NextResponse } from "next/server"
-import type { NextRequest } from "next/server"
+import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt"
 
 const protectedRoutes = [
@@ -11,12 +10,16 @@ const protectedRoutes = [
   { url: "/courses/marks-update", minPermission: 3 },
   { url: "/courses/cgpaupdate", minPermission: 3 },
   { url: "/info-update", minPermission: 2 },
-  { url: "/account", minPermission: 1 },
-  { url: "/account/change-password", minPermission: 1 },
 ]
 
 export async function middleware(req: NextRequest) {
   const token = await getToken({ req })
+
+  if (!token) {
+    const url = req.nextUrl.clone();
+    url.pathname = "/auth/signin";
+    return NextResponse.redirect(url);
+  }
 
   // Convert role to a number safely (default = 0 if not set)
   const userPermission = token?.permission ?? 0
@@ -37,6 +40,9 @@ export const config = {
     "/students/:path*",
     "/courses/:path*",
     "/info-update",
+    "/search",
+    "/dashboard",
+    "/results",
     "/account/:path*",
   ],
 }
