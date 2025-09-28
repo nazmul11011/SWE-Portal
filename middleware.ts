@@ -21,7 +21,6 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  // Convert role to a number safely (default = 0 if not set)
   const userPermission = token?.permission ?? 0
 
   const pathname = req.nextUrl.pathname
