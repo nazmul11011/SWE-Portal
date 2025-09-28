@@ -62,6 +62,7 @@ model Student {
   semester        Int?
   cgpa            Float
   creditCompleted Int
+  position        Int?
   user            User         @relation(fields: [userId], references: [id])
 }
 

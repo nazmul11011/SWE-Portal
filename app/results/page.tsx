@@ -50,6 +50,7 @@ export default async function ResultsPage() {
         id: student.id,
         cgpa: student.student?.cgpa ?? "N/A",
         creditCompleted: student.student?.creditCompleted ?? "N/A",
+        position: student.student?.position ?? "N/A",
     };
     // Merge enrollments + ORPS by courseId
     const merged = student.enrollments.map((e) => {
@@ -81,7 +82,7 @@ export default async function ResultsPage() {
             <AppSidebar
                 user={{
                     name: student.fullName ?? "",
-                    email: student.email ?? "",
+                    email: student.email,
                     avatar: student.profilePic ?? "",
                 }}
                 permission={student.role?.permission ?? 0}
@@ -114,7 +115,8 @@ export default async function ResultsPage() {
                         </CardHeader>
                         <CardContent>
                             <strong>CGPA:</strong> {studentInfo.cgpa} &nbsp;
-                            <strong>Credits:</strong> {studentInfo.creditCompleted}
+                            <strong>Credits:</strong> {studentInfo.creditCompleted} &nbsp;
+                            <strong>Position:</strong> {studentInfo.position}
                         </CardContent>
                     </Card>
                     {Object.entries(groupedBySemester).map(([semester, rows]) => (
