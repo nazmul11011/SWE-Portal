@@ -9,7 +9,7 @@ export const authOptions: AuthOptions = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        regNo: { label: "Registration No", type: "text" },
+        regNo: { label: "Registration No", type: "number" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
@@ -25,13 +25,18 @@ export const authOptions: AuthOptions = {
         const isValid = await compare(credentials.password, user.password);
         if (!isValid) return null;
 
+        await prisma.user.update({
+          where: { id: user.id },
+          data: { lastLogIn: new Date() },
+        });
+
         // Return only the necessary user info
         return {
           id: user.id,
           name: user.fullName,
           regNo: user.regNo,
-          role: user.role?.name || "student",
-          permission: user.role?.permission || 0,
+          role: user.role.name,
+          permission: user.role.permission,
         };
       },
     }),
@@ -39,8 +44,8 @@ export const authOptions: AuthOptions = {
 
   session: {
     strategy: "jwt",
-    maxAge: 1 * 60 * 60,
-    updateAge: 45 * 60,
+    maxAge: 1 * 60 * 60, // 1 hour
+    updateAge: 45 * 60,  // refresh after 45 min
   },
 
   callbacks: {

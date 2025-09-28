@@ -35,10 +35,10 @@ export default async function DashboardPage() {
     <SidebarProvider>
       <AppSidebar user={{
         name: student.fullName ?? "",
-        email: student.email ?? "",
+        email: student.email,
         avatar: student.profilePic ?? "",
       }}
-        permission={student.role?.permission ?? 0}
+        permission={student.role.permission}
       />
       <SidebarInset>
         {/* Header */}
@@ -77,7 +77,7 @@ export default async function DashboardPage() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div>
                     <p className="text-sm font-medium text-gray-500">Name</p>
-                    <p>{student.fullName}</p>
+                    <p>{student.fullName} ({student.nickName})</p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-500">Registration No</p>

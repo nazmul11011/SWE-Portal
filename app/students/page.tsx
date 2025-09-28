@@ -21,6 +21,20 @@ import { ModeToggle } from "@/components/mood-toggles";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
 
+function formatDate(date: Date | string | null): string {
+  if (!date) return "-";
+  const d = typeof date === "string" ? new Date(date) : date;
+  return d.toLocaleString("en-GB", {
+    timeZone: "Asia/Dhaka",
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
+}
+
 export default async function StudentsPage() {
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
@@ -41,6 +55,7 @@ export default async function StudentsPage() {
             email: true,
             session: true,
             profilePic: true,
+            lastLogIn: true,
             role: { select: { name: true } },
         },
         orderBy: { regNo: "asc" },
@@ -50,10 +65,10 @@ export default async function StudentsPage() {
         <SidebarProvider>
             <AppSidebar user={{
                 name: student.fullName ?? "",
-                email: student.email ?? "",
+                email: student.email,
                 avatar: student.profilePic ?? "",
             }}
-                permission={student.role?.permission ?? 0}
+                permission={student.role.permission}
             />
             <SidebarInset>
                 {/* Header */}
@@ -91,10 +106,11 @@ export default async function StudentsPage() {
                                 id: u.id,
                                 regNo: u.regNo,
                                 fullName: u.fullName ?? "",
-                                email: u.email ?? "",
+                                email: u.email,
                                 session: u.session ?? "-",
+                                lastLogIn: formatDate(u.lastLogIn),
                                 avatarUrl: u.profilePic ?? undefined,
-                                role: u.role?.name ?? "-",
+                                role: u.role.name,
                             }))}
                         />
                     </Card>

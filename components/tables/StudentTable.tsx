@@ -18,6 +18,7 @@ type StudentRow = {
 	fullName: string;
 	email: string;
 	session: string;
+	lastLogIn: string;
 	avatarUrl?: string;
 	role: string;
 };
@@ -115,6 +116,9 @@ export default function StudentTable({ rows }: { rows: StudentRow[] }) {
 							Session
 						</th>
 						<th className="h-10 px-4 text-left align-middle font-medium text-muted-foreground">
+							LastLoggedIn
+						</th>
+						<th className="h-10 px-4 text-left align-middle font-medium text-muted-foreground">
 							Role
 						</th>
 						<th className="h-10 px-4 text-right align-middle font-medium text-muted-foreground w-12">
@@ -155,6 +159,7 @@ export default function StudentTable({ rows }: { rows: StudentRow[] }) {
 							</td>
 							<td className="p-4 align-middle">{row.email}</td>
 							<td className="p-4 align-middle">{row.session}</td>
+							<td className="p-4 align-middle">{row.lastLogIn}</td>
 							<td className="p-4 align-middle capitalize">{row.role}</td>
 							<td className="p-4 align-middle text-right pr-12">
 								<TooltipProvider>
