@@ -4,6 +4,7 @@ import { getToken } from "next-auth/jwt"
 
 const protectedRoutes = [
   { url: "/students/add", minPermission: 5 },
+  { url: "/students/sessions", minPermission: 5 },
   { url: "/students", minPermission: 5 },
   { url: "/courses", minPermission: 3 },
   { url: "/courses/gradeupdate", minPermission: 3 },

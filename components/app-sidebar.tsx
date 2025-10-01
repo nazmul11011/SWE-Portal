@@ -41,6 +41,7 @@ export function AppSidebar({
       icon: Users,
       items: [
         { title: "Add", url: "/students/add" },
+        { title: "Sessions", url: "/students/sessions" },
         { title: "Lists", url: "/students" },
       ],
       minPermission: 5, // only admins and super-admins

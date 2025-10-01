@@ -32,25 +32,28 @@ export const authOptions: AuthOptions = {
           data: { lastLogIn: new Date() },
         });
 
-        // Parse headers from req
-        const ua = req?.headers?.["user-agent"] ?? "";
-        const forwarded = req?.headers?.get("x-forwarded-for");
-        const ip = forwarded ? forwarded.split(",")[0] : "unknown";
-
+        /* eslint-disable @typescript-eslint/no-explicit-any */
+        const forwardedRaw = (req?.headers as any)?.["x-forwarded-for"];
+        const ip = forwardedRaw?.split(",")[0]?.trim() || (req?.headers as any)?.["x-real-ip"] || "unknown";
+        const ua = (req?.headers as any)?.["user-agent"] ?? "";
         const parser = new UAParser(ua);
         const result = parser.getResult();
+        /* eslint-enable @typescript-eslint/no-explicit-any */
 
-        // Store login log
-        await prisma.sessionLog.create({
-          data: {
-            id: randomUUID(),
-            userId: user.id,
-            ip: Array.isArray(ip) ? ip[0] : ip,
-            device: result.device.model || result.device.type || "Unknown",
-            os: result.os.name || "Unknown",
-            browser: result.browser.name || "Unknown",
-          },
-        });
+        try {
+          await prisma.sessionLog.create({
+            data: {
+              id: randomUUID(),
+              userId: user.id,
+              ip,
+              device: result.device.model || result.device.type || "Unknown",
+              os: result.os.name || "Unknown",
+              browser: result.browser.name || "Unknown",
+            },
+          });
+        } catch (e) {
+          console.error("DEBUG: Failed to insert sessionLog", e);
+        }
 
         return {
           id: user.id,
