@@ -40,6 +40,7 @@ model User {
   enrollments Enrollment[]
   orpsMarks   ORPS_Marks[]
   passwordReset   PasswordReset[]
+  sessionLogs SessionLog[]
 }
 
 model PasswordReset {
@@ -108,7 +109,7 @@ model UserSkill {
 
 model ORPS_Marks {
   id         String   @id @default(cuid())
-  userId  String
+  userId     String
   courseId   String
   attendance Int
   classCount Int
@@ -121,4 +122,17 @@ model ORPS_Marks {
   course  Course  @relation(fields: [courseId], references: [id])
 
   @@unique([userId, courseId])
+}
+
+model SessionLog {
+  id        String   @id @default(cuid())
+  userId    String
+  ip        String?
+  device    String?
+  os        String?
+  browser   String?
+  createdAt DateTime @default(now())
+
+  // relation
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

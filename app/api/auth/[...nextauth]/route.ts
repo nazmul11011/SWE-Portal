@@ -2,8 +2,9 @@ import NextAuth, { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { prisma } from "@/lib/db";
 import { compare } from "bcryptjs";
+import { UAParser } from "ua-parser-js";
+import { randomUUID } from "crypto";
 
-// NextAuth configuration
 export const authOptions: AuthOptions = {
   providers: [
     CredentialsProvider({
@@ -12,7 +13,7 @@ export const authOptions: AuthOptions = {
         regNo: { label: "Registration No", type: "number" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials) {
+      async authorize(credentials, req) {
         if (!credentials?.regNo || !credentials.password) return null;
 
         const user = await prisma.user.findUnique({
@@ -25,12 +26,32 @@ export const authOptions: AuthOptions = {
         const isValid = await compare(credentials.password, user.password);
         if (!isValid) return null;
 
+        // Update last login timestamp
         await prisma.user.update({
           where: { id: user.id },
           data: { lastLogIn: new Date() },
         });
 
-        // Return only the necessary user info
+        // Parse headers from req
+        const ua = req?.headers?.["user-agent"] ?? "";
+        const forwarded = req?.headers?.get("x-forwarded-for");
+        const ip = forwarded ? forwarded.split(",")[0] : "unknown";
+
+        const parser = new UAParser(ua);
+        const result = parser.getResult();
+
+        // Store login log
+        await prisma.sessionLog.create({
+          data: {
+            id: randomUUID(),
+            userId: user.id,
+            ip: Array.isArray(ip) ? ip[0] : ip,
+            device: result.device.model || result.device.type || "Unknown",
+            os: result.os.name || "Unknown",
+            browser: result.browser.name || "Unknown",
+          },
+        });
+
         return {
           id: user.id,
           name: user.fullName,
@@ -44,8 +65,8 @@ export const authOptions: AuthOptions = {
 
   session: {
     strategy: "jwt",
-    maxAge: 1 * 60 * 60, // 1 hour
-    updateAge: 45 * 60,  // refresh after 45 min
+    maxAge: 1 * 60 * 60,
+    updateAge: 45 * 60,
   },
 
   callbacks: {
@@ -58,7 +79,6 @@ export const authOptions: AuthOptions = {
       }
       return token;
     },
-
     async session({ session, token }) {
       if (token) {
         session.user.id = token.id as string;

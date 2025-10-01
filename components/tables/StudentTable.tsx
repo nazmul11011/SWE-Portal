@@ -74,7 +74,7 @@ export default function StudentTable({ rows }: { rows: StudentRow[] }) {
 	}
 
 	return (
-		<div className="rounded-md border">
+		<div className="rounded-md border overflow-x-auto">
 			<div className="p-3 border-b flex items-center justify-between gap-3">
 				<Input
 					placeholder="Search by name, reg no, or email"

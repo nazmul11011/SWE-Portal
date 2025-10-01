@@ -72,6 +72,7 @@ export function AppSidebar({
       icon: Settings2,
       items: [
         { title: "Edit Profile", url: "/account" },
+        { title: "Sessions", url: "/account/sessions" },
         { title: "Change Password", url: "/account/change-password" },
       ],
       minPermission: 1, // all logged-in users

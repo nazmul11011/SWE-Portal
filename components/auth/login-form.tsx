@@ -23,7 +23,7 @@ type LoginFormValues = {
 export function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
   const { register, handleSubmit } = useForm<LoginFormValues>();
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false); // <-- Loading state
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const onSubmit = async (data: LoginFormValues) => {
