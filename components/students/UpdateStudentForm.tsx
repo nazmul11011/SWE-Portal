@@ -46,13 +46,24 @@ export default function UpdateStudentPage() {
     if (!student) return;
     const formData = new FormData();
     if (data.profilePic?.[0]) formData.append("profilePic", data.profilePic[0]);
-    if (data.linkedin) formData.append("linkedin", data.linkedin);
-    if (data.github) formData.append("github", data.github);
-    if (data.facebook) formData.append("facebook", data.facebook);
+    if (data.linkedin && data.linkedin.trim() !== "") formData.append("linkedin", data.linkedin);
+    if (data.github && data.github.trim() !== "") formData.append("github", data.github);
+    if (data.facebook && data.facebook.trim() !== "") formData.append("facebook", data.facebook);
+    if ([...formData.keys()].length === 0) {
+      toast.info("No changes to update");
+      return;
+    }
 
     startTransition(async () => {
       const res = await updateStudentInfo(student.id, formData);
-      res.success ? toast.success(res.message) : toast.error(res.message);
+      if (res.success) {
+        toast.success(res.message);
+        // Optionally refresh the updated student info:
+        const refreshed = await findStudent(student.regNo);
+        setStudent(refreshed);
+      } else {
+        toast.error(res.message);
+      }
     });
   };
 
