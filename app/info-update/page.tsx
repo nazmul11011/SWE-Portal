@@ -49,7 +49,7 @@ export default async function DashboardPage() {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">Student Info</BreadcrumbLink>
+                  <BreadcrumbLink href="/dashboard">Student Info</BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>

@@ -27,20 +27,20 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import Marquee from "react-fast-marquee";
 
 export default async function ResultsPage() {
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) return notFound();
     const id = session.user.id;
 
-    // Fetch enrollments + ORPS marks
     const student = await prisma.user.findUnique({
         where: { id },
         include: {
             role: true,
+            student: true,
             enrollments: { include: { course: true } },
             orpsMarks: { include: { course: true } },
-            student: true,
         },
     });
 
@@ -52,11 +52,22 @@ export default async function ResultsPage() {
         creditCompleted: student.student?.creditCompleted ?? "N/A",
         position: student.student?.position ?? "N/A",
     };
+
+    // Get all students from the same session for marquee
+    const sameSessionStudents = await prisma.user.findMany({
+        where: { session: student.session ?? undefined },
+        select: {
+            id: true,
+            fullName: true,
+            nickName: true,
+            student: { select: { position: true } },
+        },
+        orderBy: { student: { position: "asc" } },
+    });
+
     // Merge enrollments + ORPS by courseId
     const merged = student.enrollments.map((e) => {
-        const orps = student.orpsMarks.find(
-            (m) => m.courseId === e.courseId
-        );
+        const orps = student.orpsMarks.find((m) => m.courseId === e.courseId);
         return {
             id: e.id,
             semester: e.course.semester,
@@ -95,10 +106,10 @@ export default async function ResultsPage() {
                         <Separator orientation="vertical" />
                         <Breadcrumb>
                             <BreadcrumbList>
-                                <BreadcrumbItem>
-                                    <BreadcrumbLink href="#">Dashboard</BreadcrumbLink>
+                                <BreadcrumbItem className="hidden md:block">
+                                    <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
                                 </BreadcrumbItem>
-                                <BreadcrumbSeparator />
+                                <BreadcrumbSeparator className="hidden md:block" />
                                 <BreadcrumbItem>
                                     <BreadcrumbPage>Results</BreadcrumbPage>
                                 </BreadcrumbItem>
@@ -109,6 +120,36 @@ export default async function ResultsPage() {
                 </header>
 
                 <main className="flex flex-col gap-4 p-4 pt-2">
+                    <Card className="w-full flex flex-row rounded-sm shadow-sm overflow-hidden">
+                        <div className="ml-5">Ranks</div>
+                        <CardContent className="max-w-6xl -ml-5">
+                            <Marquee
+                                gradient={false}
+                                speed={50} // adjust speed if needed
+                                pauseOnHover
+                                loop={0}
+                            >
+                                {sameSessionStudents.map((s) => (
+                                    <span key={s.id} className="mx-2 text-sm font-medium">
+                                        <span
+                                            className={
+                                                s.id === student.id
+                                                    ? "text-cyan-400 font-semibold"
+                                                    : "text-gray-500"
+                                            }
+                                        >
+                                            {s.nickName ?? s.fullName} — {" "}
+                                            <span className="text-amber-500 font-bold">
+                                                {s.student?.position ?? "N/A"}
+                                            </span>
+                                        </span>
+                                    </span>
+                                ))}
+                            </Marquee>
+                        </CardContent>
+                    </Card>
+
+                    {/* CGPA, Credits, Position */}
                     <Card className="w-full rounded-sm shadow-sm">
                         <CardHeader>
                             <CardTitle>Final Result</CardTitle>
@@ -122,7 +163,7 @@ export default async function ResultsPage() {
                     {Object.entries(groupedBySemester).map(([semester, rows]) => (
                         <Card key={semester} className="w-full rounded-sm shadow-sm">
                             <CardHeader>
-                                <CardTitle>Results</CardTitle>
+                                <CardTitle>Semester {semester}</CardTitle>
                             </CardHeader>
                             <CardContent>
                                 {merged.length === 0 ? (

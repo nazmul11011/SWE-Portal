@@ -74,7 +74,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
               <Input
                 id="regNo"
                 type="number"
-                placeholder="202*****"
+                placeholder="202***10**"
                 {...register("regNo", { required: true })}
               />
             </div>
