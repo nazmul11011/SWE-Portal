@@ -1,5 +1,5 @@
+// app/dashboard/page.tsx
 import Image from "next/image";
-import { prisma } from "@/lib/db";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { notFound } from "next/navigation";
 import { AppSidebar } from "@/components/app-sidebar";
@@ -20,16 +20,50 @@ import {
 import { ModeToggle } from "@/components/mood-toggles";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
+import { createClient } from "@supabase/supabase-js";
+
+// Supabase client for server-side fetching
+const supabase = createClient(
+  process.env.SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) return notFound();
   const id = session.user.id;
-  const student = await prisma.user.findUnique({
-    where: { id },
-    include: { role: true, skills: { include: { skill: true } } },
-  });
+
+  const { data: student } = await supabase
+    .from("User")
+    .select(`
+      id,
+      fullName,
+      nickName,
+      school,
+      session,
+      college,
+      phoneNumber,
+      bio,
+      bloodGroup,
+      gender,
+      linkedinId,
+      githubId,
+      codeforcesId,
+      whatsapp,
+      facebook,
+      email,
+      regNo,
+      profilePic,
+      Role(name, permission),
+      UserSkill(id, Skill(name))
+    `)
+    .eq("id", id)
+    .maybeSingle();
+
   if (!student) return notFound();
+  const role = Array.isArray(student.Role) ? student.Role[0] : student.Role;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any 
+  const skills = student.UserSkill?.map((s: any) => s.Skill?.name) || [];
 
   return (
     <SidebarProvider>
@@ -38,7 +72,7 @@ export default async function DashboardPage() {
         email: student.email,
         avatar: student.profilePic ?? "",
       }}
-        permission={student.role.permission}
+        permission={role.permission}
       />
       <SidebarInset>
         {/* Header */}
@@ -154,9 +188,7 @@ export default async function DashboardPage() {
                 <div>
                   <p className="text-sm font-medium text-gray-500">Skills</p>
                   <p>
-                    {student.skills?.length
-                      ? student.skills.map((s: { skill: { name: string; }; }) => s.skill.name).join(", ")
-                      : "N/A"}
+                    {skills?.length ? skills.join(", ") : "N/A"}
                   </p>
                 </div>
                 <div>
