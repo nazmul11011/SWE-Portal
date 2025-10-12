@@ -106,6 +106,22 @@ export default async function DashboardPage() {
             </CardHeader>
 
             <div className="flex flex-col md:flex-row -ml-6">
+              {/* Profile Picture (Top on mobile, right on desktop) */}
+              <div className="w-36 h-40 relative flex-shrink-0 overflow-hidden border border-gray-300 mx-auto mb-4 md:mb-0 md:mx-0 md:ml-6 order-first md:order-last">
+                {student.profilePic ? (
+                  <Image
+                    src={student.profilePic}
+                    alt={student.fullName ?? ""}
+                    fill
+                    className="object-cover"
+                  />
+                ) : (
+                  <div className="flex items-center justify-center w-full h-full bg-gray-200 text-xl font-bold text-gray-600">
+                    {student.fullName?.[0] ?? ""}
+                  </div>
+                )}
+              </div>
+
               {/* Left Info Grid */}
               <CardContent className="flex-1">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -147,22 +163,6 @@ export default async function DashboardPage() {
                   </div>
                 </div>
               </CardContent>
-
-              {/* Right Image */}
-              <div className="w-36 h-40 relative flex-shrink-0 overflow-hidden border border-gray-300">
-                {student.profilePic ? (
-                  <Image
-                    src={student.profilePic}
-                    alt={student.fullName ?? ""}
-                    fill
-                    className="object-cover"
-                  />
-                ) : (
-                  <div className="flex items-center justify-center w-full h-full bg-gray-200 text-xl font-bold text-gray-600">
-                    {student.fullName ?? ""[0]}
-                  </div>
-                )}
-              </div>
             </div>
 
             <hr></hr>
