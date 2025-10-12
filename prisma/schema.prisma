@@ -113,8 +113,8 @@ model ORPS_Marks {
   courseId   String
   attendance Int
   classCount Int
-  termTest   Int
-  evaluation Int?
+  termTest   Float
+  evaluation Float?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 

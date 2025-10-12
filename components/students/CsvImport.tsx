@@ -150,7 +150,7 @@ export default function CsvImportUsers() {
       )}
       <Separator />
       <div className="text-sm text-muted-foreground">
-        Required headers: regNo, email, session. Optional: name, gender, phoneNumber. Role defaults to &quot;student&quot;.
+        Required headers: <b className="text-red-500">regno, name, email, session. Optional: gender, mobile. Role defaults to &quot;student&quot;</b>.
       </div>
       {hasData && (
         <div className="rounded-md border overflow-auto">

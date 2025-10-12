@@ -155,7 +155,7 @@ export default function EnrollmentClient({ courses, user }: { courses: any[], us
                 Upload
               </Button>
             </CardContent>
-            <p className="ml-6 text-sm text-muted-foreground">The CSV file must contain these headers: regNo, grade</p>
+            <p className="ml-6 text-sm text-muted-foreground">The CSV file must contain these headers: <b className="text-red-500">regNo, grade</b></p>
           </Card>
 
           {/* Preview CSV Data */}

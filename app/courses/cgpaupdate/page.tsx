@@ -67,7 +67,7 @@ export default async function DashboardPage() {
           <Card className="w-full rounded-sm shadow-sm border mt-4">
             <CardHeader>
               <CardTitle>
-                Upload CGPA CSV
+                Upload CGPA CSV & Update Ranks
               </CardTitle>
             </CardHeader>
 

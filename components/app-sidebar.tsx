@@ -62,7 +62,7 @@ export function AppSidebar({
       items: [
         { title: "Add Courses", url: "/courses" },
         { title: "Grade Update", url: "/courses/gradeupdate" },
-        { title: "Marks Update", url: "/courses/marks-update" },
+        { title: "Marks Update", url: "/courses/marksupdate" },
         { title: "CGPA Update", url: "/courses/cgpaupdate" },
       ],
       minPermission: 3, // moderators and above

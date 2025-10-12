@@ -36,3 +36,55 @@ export async function uploadCgpaAction(
     return { success: false, message: "Internal server error." };
   }
 }
+
+export async function updateStudentPositionsAction(session: string) {
+  if (!session) {
+    return { success: false, message: "Session is required." };
+  }
+
+  try {
+    // Fetch all students in the given session with CGPA + creditCompleted + regNo
+    const students = await prisma.student.findMany({
+      where: { user: { session: session } },
+      include: { user: { select: { regNo: true }}},
+      orderBy: [{ cgpa: "desc" }, { creditCompleted: "desc" }],
+    });
+
+    if (students.length === 0) {
+      return {
+        success: false,
+        message: `No students found for session ${session}`,
+      };
+    }
+
+    // Assign positions (handle ties)
+    let position = 0;
+    let lastCgpa: number | null = null;
+    let sameRankCount = 0;
+
+    for (let i = 0; i < students.length; i++) {
+      const s = students[i];
+
+      if (s.cgpa === lastCgpa) {
+        sameRankCount += 1;
+      } else {
+        position = i + 1;
+        sameRankCount = 1;
+      }
+      lastCgpa = s.cgpa;
+
+      await prisma.student.update({
+        where: { id: s.id },
+        data: { position },
+      });
+    }
+
+    return {
+      success: true,
+      message: `Positions updated successfully for ${session}`,
+    };
+  } catch (error) {
+    console.error("Error updating positions:", error);
+    return { success: false, message: "Error updating positions" };
+  }
+}
