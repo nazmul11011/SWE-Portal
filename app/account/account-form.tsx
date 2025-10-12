@@ -115,7 +115,7 @@ export default function AccountForm({
                         <div className="grid gap-2">
                             <div>
                                 <Label className="mb-2">Full Name</Label>
-                                <Input {...form.register("fullName")} />
+                                <Input {...form.register("fullName")} disabled />
                             </div>
                             <div>
                                 <Label className="my-2">Nick Name</Label>

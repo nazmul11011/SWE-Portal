@@ -9,7 +9,10 @@ export default function Home() {
         </h2>
         <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
           <li className="mb-2 tracking-[-.01em]">
-            ২০১৬-২০২১ ব্যাচের পাসওয়ার্ড হিসেবে, কোর্স রেজিস্ট্রেশান ওয়েবসাইট এর প্রাথমিক পাসওয়ার্ড সেট করা হয়েছে।
+            ২০১৬-২০২0 ব্যাচের পাসওয়ার্ড হিসেবে, কোর্স রেজিস্ট্রেশান ওয়েবসাইট এর প্রাথমিক পাসওয়ার্ড সেট করা হয়েছে।
+          </li>
+          <li className="mb-2 tracking-[-.01em]">
+            ২০২১,২০২২ ব্যাচের পাসওয়ার্ড সেট করা হয় নাই, forget password পেইজ থেকে ভর্তির সময় প্রধানকৃত জি-মেইল দিয়ে পরিবর্তন করতে হবে।
           </li>
           <li className="mb-2 tracking-[-.01em]">
             ২০২৩,২০২৪ ব্যাচের পাসওয়ার্ড প্রিভিউ/বেটা সোসাইটি পেজ থেকে নেয়া হয়েছে।
