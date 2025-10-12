@@ -35,6 +35,7 @@ export default function EnrollmentClient({ courses, user }: { courses: any[], us
   const [selectedSemester, setSelectedSemester] = React.useState<string | undefined>(undefined);
   const [selectedCourse, setSelectedCourse] = React.useState("");
   const [csvData, setCsvData] = React.useState<{ regNo: string; grade: string }[]>([]);
+  const [isUploading, setIsUploading] = React.useState(false);
 
   // Filtered courses based on semester
   const filteredCourses = selectedSemester
@@ -65,6 +66,8 @@ export default function EnrollmentClient({ courses, user }: { courses: any[], us
   const handleUpload = async () => {
     if (!selectedCourse || csvData.length === 0) return;
 
+    setIsUploading(true);
+
     const response = await fetch("/api/enrollment/upload", {
       method: "POST",
       body: JSON.stringify({ courseId: selectedCourse, students: csvData }),
@@ -79,6 +82,7 @@ export default function EnrollmentClient({ courses, user }: { courses: any[], us
     } else {
       toast.error("Upload failed");
     }
+    setIsUploading(false);
   };
 
   // Get all unique semesters from courses
@@ -97,20 +101,20 @@ export default function EnrollmentClient({ courses, user }: { courses: any[], us
 
       <SidebarInset>
         <header className="flex justify-between h-16 items-center gap-2 px-4">
-        <div className="flex items-center gap-2 px-4">
-          <SidebarTrigger />
-          <Separator orientation="vertical" />
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink href="/courses">Courses</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbPage>Enrollment</BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
+          <div className="flex items-center gap-2 px-4">
+            <SidebarTrigger />
+            <Separator orientation="vertical" />
+            <Breadcrumb>
+              <BreadcrumbList>
+                <BreadcrumbItem>
+                  <BreadcrumbLink href="/courses">Courses</BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbPage>Enrollment</BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
           </div>
           <div className="ml-auto"><ModeToggle /></div>
         </header>
@@ -151,8 +155,8 @@ export default function EnrollmentClient({ courses, user }: { courses: any[], us
               </Select>
 
               <Input type="file" accept=".csv" onChange={handleFileUpload} />
-              <Button onClick={handleUpload} disabled={!selectedCourse || csvData.length === 0}>
-                Upload
+              <Button onClick={handleUpload} disabled={ isUploading || !selectedCourse || csvData.length === 0}>
+                {isUploading ? "Uploading..." : "Upload"}
               </Button>
             </CardContent>
             <p className="ml-6 text-sm text-muted-foreground">The CSV file must contain these headers: <b className="text-red-500">regNo, grade</b></p>

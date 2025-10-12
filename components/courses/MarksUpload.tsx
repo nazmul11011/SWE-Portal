@@ -35,6 +35,7 @@ export default function MarksUploadClient({ courses, user }: { courses: any[]; u
   const [selectedSemester, setSelectedSemester] = React.useState<string>();
   const [selectedCourse, setSelectedCourse] = React.useState("");
   const [classCount, setClassCount] = React.useState<number | undefined>();
+  const [isUploading, setIsUploading] = React.useState(false);
   const [csvData, setCsvData] = React.useState<
     { regNo: string; attendance: string; termTest: string; evaluation: string }[]
   >([]);
@@ -82,7 +83,7 @@ export default function MarksUploadClient({ courses, user }: { courses: any[]; u
       toast.error("No CSV data found");
       return;
     }
-
+    setIsUploading(true);
     const response = await fetch("/api/marks/upload", {
       method: "POST",
       body: JSON.stringify({
@@ -102,6 +103,7 @@ export default function MarksUploadClient({ courses, user }: { courses: any[]; u
     } else {
       toast.error("Upload failed");
     }
+    setIsUploading(false);
   };
 
   const semesters = Array.from(new Set(courses.map((c) => c.semester))).sort((a, b) => a - b);
@@ -180,8 +182,8 @@ export default function MarksUploadClient({ courses, user }: { courses: any[]; u
               />
 
               <Input type="file" accept=".csv" onChange={handleFileUpload} className="w-56" />
-              <Button onClick={handleUpload} disabled={!selectedCourse || csvData.length === 0}>
-                Upload
+              <Button onClick={handleUpload} disabled={ isUploading || !selectedCourse || csvData.length === 0}>
+                {isUploading ? "Uploading..." : "Upload"}
               </Button>
             </CardContent>
             <p className="ml-6 text-sm text-muted-foreground">
