@@ -1,7 +1,5 @@
 import { NextRequest } from "next/server";
 import { prisma } from "@/lib/db";
-import bcrypt from "bcryptjs";
-import { randomUUID } from "crypto";
 
 export async function POST(req: NextRequest) {
   try {
@@ -40,11 +38,9 @@ export async function POST(req: NextRequest) {
         }
 
         const roleId = '0a0474e9-95ad-4259-9043-7b473666f197';
-        const hashedPassword = await bcrypt.hash(u.regNo, 10);
         const fullName = (u.fullName?.trim() || u.email?.split("@")[0]?.replace(/\./g, " ") || u.regNo);
         await prisma.user.create({
           data: {
-            id: randomUUID(),
             regNo: u.regNo,
             fullName,
             nickName: fullName,
@@ -53,7 +49,7 @@ export async function POST(req: NextRequest) {
             phoneNumber: u.phoneNumber,
             session: u.session,
             roleId,
-            password: hashedPassword,
+            password: "$setpassword",
           },
         });
         created++;

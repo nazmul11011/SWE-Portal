@@ -53,8 +53,8 @@ export default async function StudentPage({ params }: PageProps) {
   return (
     <SidebarProvider>
       <AppSidebar user={{
-        name: user.fullName ?? "",
-        email: user.email ?? "",
+        name: user.fullName,
+        email: user.email,
         avatar: user.profilePic ?? "",
       }}
         permission={user.role?.permission ?? 0}

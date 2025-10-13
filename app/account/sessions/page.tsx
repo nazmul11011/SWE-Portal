@@ -17,12 +17,12 @@ import {
     SidebarTrigger,
 } from "@/components/ui/sidebar";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
 } from "@/components/ui/table";
 import { ModeToggle } from "@/components/mood-toggles";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
@@ -45,7 +45,7 @@ export default async function DashboardPage() {
     return (
         <SidebarProvider>
             <AppSidebar user={{
-                name: student.fullName ?? "",
+                name: student.fullName,
                 email: student.email,
                 avatar: student.profilePic ?? "",
             }}
@@ -106,7 +106,15 @@ export default async function DashboardPage() {
                                                 <TableCell>{log.os ?? "-"}</TableCell>
                                                 <TableCell>{log.browser ?? "-"}</TableCell>
                                                 <TableCell>
-                                                    {new Date(log.createdAt).toLocaleString()}
+                                                    {new Date(log.createdAt).toLocaleString("en-GB", {
+                                                        timeZone: "Asia/Dhaka",
+                                                        day: "2-digit",
+                                                        month: "short",
+                                                        year: "numeric",
+                                                        hour: "2-digit",
+                                                        minute: "2-digit",
+                                                        hour12: true,
+                                                    })}
                                                 </TableCell>
                                             </TableRow>
                                         ))}

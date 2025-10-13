@@ -70,8 +70,8 @@ export default async function SearchUserPage({ searchParams }: Props) {
     <SidebarProvider>
       <AppSidebar
         user={{
-          name: student.fullName ?? "",
-          email: student.email ?? "",
+          name: student.fullName,
+          email: student.email,
           avatar: student.profilePic ?? "",
         }}
         permission={student.role?.permission ?? 0}

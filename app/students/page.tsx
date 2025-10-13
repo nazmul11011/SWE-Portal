@@ -64,7 +64,7 @@ export default async function StudentsPage() {
     return (
         <SidebarProvider>
             <AppSidebar user={{
-                name: student.fullName ?? "",
+                name: student.fullName,
                 email: student.email,
                 avatar: student.profilePic ?? "",
             }}
@@ -79,7 +79,7 @@ export default async function StudentsPage() {
                         <Breadcrumb>
                             <BreadcrumbList>
                                 <BreadcrumbItem className="hidden md:block">
-                                    <BreadcrumbLink href="#">Users</BreadcrumbLink>
+                                    <BreadcrumbLink href="/students">Users</BreadcrumbLink>
                                 </BreadcrumbItem>
                                 <BreadcrumbSeparator className="hidden md:block" />
                                 <BreadcrumbItem>
@@ -105,7 +105,7 @@ export default async function StudentsPage() {
                             rows={users.map((u) => ({
                                 id: u.id,
                                 regNo: u.regNo,
-                                fullName: u.fullName ?? "",
+                                fullName: u.fullName,
                                 email: u.email,
                                 session: u.session ?? "-",
                                 lastLogIn: formatDate(u.lastLogIn),

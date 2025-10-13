@@ -30,7 +30,6 @@ import { getServerSession } from "next-auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { revalidatePath } from "next/cache";
-import { randomUUID } from "crypto";
 
 export default async function CoursesPage() {
     // SSR session
@@ -52,8 +51,8 @@ export default async function CoursesPage() {
         <SidebarProvider>
             <AppSidebar
                 user={{
-                    name: user.fullName ?? "",
-                    email: user.email ?? "",
+                    name: user.fullName,
+                    email: user.email,
                     avatar: user.profilePic ?? "",
                 }}
                 permission={user.role?.permission ?? 0}
@@ -133,7 +132,6 @@ export default async function CoursesPage() {
 
                                     await prisma.course.create({
                                         data: {
-                                            id: randomUUID(),
                                             code,
                                             title,
                                             credit,

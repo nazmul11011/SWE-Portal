@@ -1,5 +1,4 @@
 import { prisma } from "@/lib/db";
-import { randomUUID } from "crypto";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -42,7 +41,6 @@ export async function POST(req: Request) {
         },
         update: { grade: s.grade },
         create: {
-          id: randomUUID(),
           userId: student.id,
           courseId,
           grade: s.grade,

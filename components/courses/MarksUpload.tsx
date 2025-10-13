@@ -112,8 +112,8 @@ export default function MarksUploadClient({ courses, user }: { courses: any[]; u
     <SidebarProvider>
       <AppSidebar
         user={{
-          name: user.fullName ?? "",
-          email: user.email ?? "",
+          name: user.fullName,
+          email: user.email,
           avatar: user.profilePic ?? "",
         }}
         permission={user.role?.permission ?? 0}

@@ -92,8 +92,8 @@ export default function EnrollmentClient({ courses, user }: { courses: any[], us
     <SidebarProvider>
       <AppSidebar
         user={{
-          name: user.fullName ?? "",
-          email: user.email ?? "",
+          name: user.fullName,
+          email: user.email,
           avatar: user.profilePic ?? "",
         }}
         permission={user.role?.permission ?? 0}

@@ -1,7 +1,6 @@
 "use server";
 
 import { prisma } from "@/lib/db";
-import { randomUUID } from "crypto";
 
 export async function uploadCgpaAction(
   data: { regNo: string; creditCompleted: string; cgpa: string }[]
@@ -22,7 +21,6 @@ export async function uploadCgpaAction(
           cgpa: parseFloat(record.cgpa),
         },
         create: {
-          id: randomUUID(),
           userId: user.id,
           creditCompleted: parseInt(record.creditCompleted, 10),
           cgpa: parseFloat(record.cgpa),

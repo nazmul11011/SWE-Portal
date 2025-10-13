@@ -92,7 +92,7 @@ export default async function ResultsPage() {
         <SidebarProvider>
             <AppSidebar
                 user={{
-                    name: student.fullName ?? "",
+                    name: student.fullName,
                     email: student.email,
                     avatar: student.profilePic ?? "",
                 }}

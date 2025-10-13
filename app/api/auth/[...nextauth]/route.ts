@@ -49,7 +49,6 @@ export const authOptions: AuthOptions = {
         await Promise.all([
           supabase.from("User").update({ lastLogIn: now }).eq("id", user.id),
           supabase.from("SessionLog").insert({
-            id: crypto.randomUUID(),
             userId: user.id,
             ip,
             device: device.device.model || device.device.type || "Unknown",

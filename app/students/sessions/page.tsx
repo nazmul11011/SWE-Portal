@@ -59,7 +59,7 @@ export default async function DashboardPage() {
     return (
         <SidebarProvider>
             <AppSidebar user={{
-                name: student.fullName ?? "",
+                name: student.fullName,
                 email: student.email,
                 avatar: student.profilePic ?? "",
             }}
@@ -74,7 +74,7 @@ export default async function DashboardPage() {
                         <Breadcrumb>
                             <BreadcrumbList>
                                 <BreadcrumbItem className="hidden md:block">
-                                    <BreadcrumbLink href="#">Account</BreadcrumbLink>
+                                    <BreadcrumbLink href="/students">Users</BreadcrumbLink>
                                 </BreadcrumbItem>
                                 <BreadcrumbSeparator className="hidden md:block" />
                                 <BreadcrumbItem>
@@ -129,7 +129,15 @@ export default async function DashboardPage() {
                                                                 <TableCell>{log.device ?? "-"}</TableCell>
                                                                 <TableCell>{log.os ?? "-"}</TableCell>
                                                                 <TableCell>{log.browser ?? "-"}</TableCell>
-                                                                <TableCell>{new Date(log.createdAt).toLocaleString()}</TableCell>
+                                                                <TableCell>{new Date(log.createdAt).toLocaleString("en-GB", {
+                                                                    timeZone: "Asia/Dhaka",
+                                                                    day: "2-digit",
+                                                                    month: "short",
+                                                                    year: "numeric",
+                                                                    hour: "2-digit",
+                                                                    minute: "2-digit",
+                                                                    hour12: true,
+                                                                })}</TableCell>
                                                             </TableRow>
                                                         ))}
                                                     </TableBody>

@@ -3,7 +3,6 @@
 import { prisma } from "@/lib/db"
 import { revalidatePath } from "next/cache"
 import cloudinary from "cloudinary"
-import { randomUUID } from "crypto"
 import { getServerSession } from "next-auth"
 import { authOptions } from "../api/auth/[...nextauth]/route"
 import bcrypt from "bcryptjs"
@@ -58,7 +57,6 @@ export async function updateAccount(data: any, file?: File) {
     await prisma.userSkill.deleteMany({ where: { userId } })
     if (skills.length > 0) {
       const skillRecords = skills.map(skillId => ({
-        id: randomUUID(),
         userId,
         skillId,
       }))

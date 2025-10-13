@@ -65,8 +65,8 @@ export default async function AccountPage() {
     return (
         <SidebarProvider>
             <AppSidebar user={{
-                name: user.fullName ?? "",
-                email: user.email ?? "",
+                name: user.fullName,
+                email: user.email,
                 avatar: user.profilePic ?? "",
             }} 
                 permission={user.role?.permission ?? 0}
@@ -80,7 +80,7 @@ export default async function AccountPage() {
                         <Breadcrumb>
                             <BreadcrumbList>
                                 <BreadcrumbItem className="hidden md:block">
-                                    <BreadcrumbLink href="#">Account</BreadcrumbLink>
+                                    <BreadcrumbLink href="/account">Account</BreadcrumbLink>
                                 </BreadcrumbItem>
                                 <BreadcrumbSeparator className="hidden md:block" />
                                 <BreadcrumbItem>

@@ -34,8 +34,8 @@ export default async function DashboardPage() {
   return (
     <SidebarProvider>
       <AppSidebar user={{
-        name: student.fullName ?? "",
-        email: student.email ?? "",
+        name: student.fullName,
+        email: student.email,
         avatar: student.profilePic ?? "",
       }}
         permission={student.role?.permission ?? 0}
@@ -49,7 +49,7 @@ export default async function DashboardPage() {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">Courses</BreadcrumbLink>
+                  <BreadcrumbLink href="/courses">Courses</BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>

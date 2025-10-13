@@ -69,7 +69,7 @@ export async function DashboardContent() {
     <SidebarProvider>
       <AppSidebar
         user={{
-          name: student.fullName ?? "",
+          name: student.fullName,
           email: student.email,
           avatar: student.profilePic ?? "",
         }}

@@ -37,8 +37,8 @@ export default async function UsersAddPage() {
   return (
     <SidebarProvider>
       <AppSidebar user={{
-        name: student.fullName ?? "",
-        email: student.email ?? "",
+        name: student.fullName,
+        email: student.email,
         avatar: student.profilePic ?? "",
       }}
         permission={student.role?.permission ?? 0}

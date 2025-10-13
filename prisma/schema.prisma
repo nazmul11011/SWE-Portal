@@ -8,68 +8,66 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(cuid())
-  regNo        String   @unique
-  fullName     String
-  nickName     String?
-  gender       String?
-  email        String   @unique
-  profilePic   String?
-  bio          String?
-  session      String?
-  phoneNumber  String?
-  linkedinId   String?
-  githubId     String?
-  codeforcesId String?
-  whatsapp     String?
-  facebook     String?
-  bloodGroup   String?
-  school       String?
-  college      String?
-  hometown     String?
-  password     String
-  roleId       String
-  lastLogIn    DateTime?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  // relations
-  student     Student?
-  role        Role         @relation(fields: [roleId], references: [id])
-  skills      UserSkill[] 
-  enrollments Enrollment[]
-  orpsMarks   ORPS_Marks[]
-  passwordReset   PasswordReset[]
-  sessionLogs SessionLog[]
+  id            String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  regNo         String         @unique(map: "User_regno_key")
+  fullName      String
+  email         String         @unique
+  profilePic    String?
+  bio           String?
+  session       String?
+  phoneNumber   String?
+  linkedinId    String?
+  githubId      String?
+  codeforcesId  String?
+  whatsapp      String?
+  facebook      String?
+  bloodGroup    String?
+  school        String?
+  college       String?
+  hometown      String?
+  password      String
+  roleId        String         @db.Uuid
+  createdAt     DateTime?      @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime?      @default(now()) @updatedAt @db.Timestamptz(6)
+  nickName      String?
+  gender        String?
+  lastLogIn     DateTime?      @db.Timestamptz(6)
+  enrollments   Enrollment[]
+  orpsMarks     ORPS_Marks[]
+  passwordReset PasswordReset?
+  sessionLogs   SessionLog[]
+  student       Student?
+  role          Role           @relation(fields: [roleId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_user_role")
+  skills        UserSkill[]
 }
 
 model PasswordReset {
-  id        String   @id @default(cuid())
-  userId    String   @unique
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String   @unique @db.Uuid
   otp       String
-  expiresAt DateTime
-  user      User     @relation(fields: [userId], references: [id])
+  expiresAt DateTime @db.Timestamptz(6)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Role {
-  id         String @id @default(cuid())
+  id         String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name       String @unique
-  permission Int    @default(1)
+  permission Int    @default(0)
   users      User[]
 }
 
 model Student {
-  id              String       @id @default(cuid())
-  userId          String       @unique
+  id              String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId          String @unique(map: "Student_userid_key") @db.Uuid
   semester        Int?
   cgpa            Float
-  creditCompleted Int
+  creditCompleted Int    @default(0)
   position        Int?
-  user            User         @relation(fields: [userId], references: [id])
+  user            User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_student_user")
 }
 
 model Course {
-  id          String       @id @default(cuid())
+  id          String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   code        String
   title       String
   credit      Float
@@ -79,60 +77,56 @@ model Course {
 }
 
 model Enrollment {
-  id       String  @id @default(cuid())
-  userId   String
-  courseId String
+  id       String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId   String  @db.Uuid
+  courseId String  @db.Uuid
   grade    String?
+  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "Enrollment_studentid_fkey")
+  course   Course  @relation(fields: [courseId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_enroll_course")
 
-  user   User   @relation(fields: [userId], references: [id])
-  course Course @relation(fields: [courseId], references: [id])
-
-  @@unique([userId, courseId], name: "userId_courseId")
+  @@unique([userId, courseId], name: "userId_courseId", map: "userId_courseId")
 }
 
 model Skill {
-  id    String      @id @default(cuid())
-  name  String      @unique
+  id    String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name  String
+  area  String
   users UserSkill[]
 }
 
 model UserSkill {
-  id      String @id @default(cuid())
-  userId  String
-  skillId String
+  id      String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId  String @db.Uuid
+  skillId String @db.Uuid
+  skill   Skill  @relation(fields: [skillId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_userskill_skill")
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_userskill_user")
 
-  user  User  @relation(fields: [userId], references: [id])
-  skill Skill @relation(fields: [skillId], references: [id])
-
-  @@unique([userId, skillId])
+  @@unique([userId, skillId], map: "uq_user_skill")
 }
 
 model ORPS_Marks {
-  id         String   @id @default(cuid())
-  userId     String
-  courseId   String
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId     String    @db.Uuid
+  courseId   String    @db.Uuid
   attendance Int
   classCount Int
-  termTest   Float
-  evaluation Float?
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  termTest   Float     @db.Real
+  evaluation Float?    @db.Real
+  createdAt  DateTime? @default(now()) @db.Timestamptz(6)
+  updatedAt  DateTime? @default(now()) @updatedAt @db.Timestamptz(6)
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "ORPS_Marks_studentId_fkey")
+  course     Course    @relation(fields: [courseId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_course")
 
-  user User @relation(fields: [userId], references: [id])
-  course  Course  @relation(fields: [courseId], references: [id])
-
-  @@unique([userId, courseId])
+  @@unique([userId, courseId], map: "unique_student_course")
 }
 
 model SessionLog {
-  id        String   @id @default(cuid())
-  userId    String
-  ip        String?
-  device    String?
-  os        String?
-  browser   String?
-  createdAt DateTime @default(now())
-
-  // relation
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String   @db.Uuid
+  ip        String?  @db.VarChar(100)
+  device    String   @default("Unknown") @db.VarChar(100)
+  os        String   @default("Unknown") @db.VarChar(100)
+  browser   String   @default("Unknown") @db.VarChar(100)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "SessionLog_userid_fkey")
 }

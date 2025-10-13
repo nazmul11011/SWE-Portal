@@ -18,11 +18,6 @@ const nextConfig: NextConfig = {
         hostname: "avatars.githubusercontent.com",
         pathname: "/**",
       },
-      {
-        protocol: "https",
-        hostname: "swe-23.vercel.app",
-        pathname: "/**",
-      },
     ],
   },
 };
