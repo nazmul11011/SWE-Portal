@@ -50,6 +50,13 @@ export default function EnrollmentClient({ courses, user }: { courses: any[], us
     Papa.parse(file, {
       header: true,
       skipEmptyLines: true,
+      transformHeader: (header) => {
+        const normalized = header.trim().toLowerCase();
+
+        if (normalized === "registration no." || normalized === "registration no" || normalized === "regNo") return "regNo";
+        if (normalized === "grade point" || normalized === "grade") return "grade";
+        return header;
+      },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       complete: (results: { data: any[] }) => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -155,11 +162,14 @@ export default function EnrollmentClient({ courses, user }: { courses: any[], us
               </Select>
 
               <Input type="file" accept=".csv" onChange={handleFileUpload} />
-              <Button onClick={handleUpload} disabled={ isUploading || !selectedCourse || csvData.length === 0}>
+              <Button onClick={handleUpload} disabled={isUploading || !selectedCourse || csvData.length === 0}>
                 {isUploading ? "Uploading..." : "Upload"}
               </Button>
             </CardContent>
-            <p className="ml-6 text-sm text-muted-foreground">The CSV file must contain these headers: <b className="text-red-500">regNo, grade</b></p>
+            <p className="ml-6 text-sm text-muted-foreground">The CSV file must contain these headers: 
+              <b className="text-red-500"> regNo , grade</b> or
+              <b className="text-green-500"> Registration No. , Grade Point</b> 
+            </p>
           </Card>
 
           {/* Preview CSV Data */}
