@@ -73,6 +73,7 @@ export default async function ResultsPage() {
             semester: e.course.semester,
             code: e.course.code,
             title: e.course.title,
+            credit: e.course.credit,
             grade: e.grade || "N/A",
             attendance: orps?.attendance ?? "N/A",
             classCount: orps?.classCount ?? "N/A",
@@ -174,6 +175,7 @@ export default async function ResultsPage() {
                                             <TableRow>
                                                 <TableHead>Code</TableHead>
                                                 <TableHead>Course</TableHead>
+                                                <TableHead>Credit</TableHead>
                                                 <TableHead>Attendance</TableHead>
                                                 <TableHead>Term Test</TableHead>
                                                 <TableHead>Evaluation</TableHead>
@@ -185,6 +187,7 @@ export default async function ResultsPage() {
                                                 <TableRow key={row.id}>
                                                     <TableCell>{row.code}</TableCell>
                                                     <TableCell>{row.title}</TableCell>
+                                                    <TableCell>{row.credit}</TableCell>
                                                     <TableCell>{row.attendance} / {row.classCount}</TableCell>
                                                     <TableCell>{row.termTest}</TableCell>
                                                     <TableCell>{row.evaluation}</TableCell>

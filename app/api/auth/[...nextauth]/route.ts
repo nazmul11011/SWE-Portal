@@ -62,7 +62,7 @@ export const authOptions: AuthOptions = {
           id: user.id,
           name: user.fullName,
           regNo: user.regNo,
-          role: role?.name ?? "User",
+          role: role.name,
           permission: role?.permission ?? 0,
         };
       },

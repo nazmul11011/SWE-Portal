@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/db";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { notFound } from "next/navigation";
 import { AppSidebar } from "@/components/app-sidebar";
 import {
@@ -117,6 +117,7 @@ export default async function CoursesPage() {
                     <Card className="w-full rounded-sm shadow-sm border">
                         <CardHeader>
                             <CardTitle>Add New Course</CardTitle>
+                            <CardDescription className="text-red-500">Caution: Don&apos;t duplicate course</CardDescription>
                         </CardHeader>
                         <CardContent>
                             <form
