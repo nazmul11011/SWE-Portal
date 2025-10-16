@@ -37,7 +37,7 @@ export default function MarksUploadClient({ courses, user }: { courses: any[]; u
   const [classCount, setClassCount] = React.useState<number | undefined>();
   const [isUploading, setIsUploading] = React.useState(false);
   const [csvData, setCsvData] = React.useState<
-    { regNo: string; attendance: string; termTest: string; evaluation: string }[]
+    { regNo: string; attendance: string; termTest: string; evaluation: string; partA?: string; partB?: string; }[]
   >([]);
 
   const filteredCourses = selectedSemester
@@ -63,6 +63,8 @@ export default function MarksUploadClient({ courses, user }: { courses: any[]; u
             attendance: row.attendance || "0",
             termTest: row.termTest || "0",
             evaluation: row.evaluation || "0",
+            partA: row.partA || "0",
+            partB: row.partB || "0",
           }));
         setCsvData(parsed);
       },
@@ -187,7 +189,7 @@ export default function MarksUploadClient({ courses, user }: { courses: any[]; u
               </Button>
             </CardContent>
             <p className="ml-6 text-sm text-muted-foreground">
-              The CSV file must contain these headers: <b className="text-red-500">regNo, attendance, termTest, evaluation</b>
+              The CSV file must contain these headers: <b className="text-red-500">regNo, attendance, termTest, evaluation</b> Optional headers: <b className="text-blue-500">partA, partB</b>
             </p>
           </Card>
 
@@ -207,6 +209,8 @@ export default function MarksUploadClient({ courses, user }: { courses: any[]; u
                       <TableHead>Attendance</TableHead>
                       <TableHead>Term Test</TableHead>
                       <TableHead>Evaluation</TableHead>
+                      <TableHead>Part A</TableHead>
+                      <TableHead>Part B</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -216,6 +220,8 @@ export default function MarksUploadClient({ courses, user }: { courses: any[]; u
                         <TableCell>{row.attendance}</TableCell>
                         <TableCell>{row.termTest}</TableCell>
                         <TableCell>{row.evaluation}</TableCell>
+                        <TableCell>{row.partA ?? "—"}</TableCell>
+                        <TableCell>{row.partB ?? "—"}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>

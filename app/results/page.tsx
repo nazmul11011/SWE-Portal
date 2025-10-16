@@ -79,6 +79,8 @@ export default async function ResultsPage() {
             classCount: orps?.classCount ?? "N/A",
             termTest: orps?.termTest ?? "N/A",
             evaluation: orps?.evaluation ?? "N/A",
+            parta: orps?.parta ?? "N/A",
+            partb: orps?.partb ?? "N/A",
         };
     });
     const groupedBySemester: Record<string, typeof merged> = {};
@@ -179,6 +181,8 @@ export default async function ResultsPage() {
                                                 <TableHead>Attendance</TableHead>
                                                 <TableHead>Term Test</TableHead>
                                                 <TableHead>Evaluation</TableHead>
+                                                <TableHead>Part A</TableHead>
+                                                <TableHead>Part B</TableHead>
                                                 <TableHead>Grade</TableHead>
                                             </TableRow>
                                         </TableHeader>
@@ -191,6 +195,8 @@ export default async function ResultsPage() {
                                                     <TableCell>{row.attendance} / {row.classCount}</TableCell>
                                                     <TableCell>{row.termTest}</TableCell>
                                                     <TableCell>{row.evaluation}</TableCell>
+                                                    <TableCell>{row.parta}</TableCell>
+                                                    <TableCell>{row.partb}</TableCell>
                                                     <TableCell>{row.grade}</TableCell>
                                                 </TableRow>
                                             ))}

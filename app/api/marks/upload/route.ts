@@ -12,6 +12,8 @@ export async function POST(req: Request) {
         attendance: string;
         termTest: string;
         evaluation: string;
+        partA?: string;
+        partB?: string;
       }[];
     };
 
@@ -33,7 +35,7 @@ export async function POST(req: Request) {
 
     const results: { regNo: string; status: string }[] = [];
 
-    // Loop through all student mark records
+    // Process each student's record
     for (const s of students) {
       const student = await prisma.user.findUnique({
         where: { regNo: s.regNo },
@@ -44,10 +46,12 @@ export async function POST(req: Request) {
         continue;
       }
 
-      // Convert marks to numeric safely
+      // Convert marks safely
       const attendance = parseInt(s.attendance) || 0;
       const termTest = parseFloat(s.termTest) || 0;
       const evaluation = parseFloat(s.evaluation) || 0;
+      const parta = parseFloat(s.partA ?? "") || 0;
+      const partb = parseFloat(s.partB ?? "") || 0;
 
       // Upsert marks record
       await prisma.oRPS_Marks.upsert({
@@ -61,6 +65,8 @@ export async function POST(req: Request) {
           attendance,
           termTest,
           evaluation,
+          parta,
+          partb,
           classCount,
         },
         create: {
@@ -69,6 +75,8 @@ export async function POST(req: Request) {
           attendance,
           termTest,
           evaluation,
+          parta,
+          partb,
           classCount,
         },
       });
