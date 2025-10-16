@@ -9,7 +9,7 @@ export default function Home() {
         </h2>
         <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
           <li className="mb-2 tracking-[-.01em]">
-            ২০১৬-২০২0 ব্যাচের পাসওয়ার্ড হিসেবে, কোর্স রেজিস্ট্রেশান ওয়েবসাইট এর প্রাথমিক পাসওয়ার্ড সেট করা হয়েছে।
+            ২০১৬-২০২০ ব্যাচের পাসওয়ার্ড হিসেবে, কোর্স রেজিস্ট্রেশান ওয়েবসাইট এর প্রাথমিক পাসওয়ার্ড সেট করা হয়েছে।
           </li>
           <li className="mb-2 tracking-[-.01em]">
             ২০২১,২০২২ ব্যাচের পাসওয়ার্ড সেট করা হয় নাই, forget password পেইজ থেকে ভর্তির সময় প্রধানকৃত জি-মেইল দিয়ে পরিবর্তন করতে হবে।
@@ -63,7 +63,7 @@ export default function Home() {
         </a>
         <a
           className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+          href="/dashboard"
           target="_blank"
           rel="noopener noreferrer"
         >

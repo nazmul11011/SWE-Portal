@@ -18,7 +18,26 @@ const firaCode = Fira_Code({
 
 export const metadata: Metadata = {
   title: "Student Dashboard",
-  description: "Department Portal",
+  description:
+    "A centralized student dashboard for the Department of Software Engineering, Shahjalal University of Science and Technology (SUST). Access course details, grades, and academic resources in one place.",
+  keywords: [
+    "Student Dashboard",
+    "Software Engineering",
+    "SWE", "SUST",
+    "Shahjalal University of Science and Technology",
+    "Course Management",
+    "Academic Portal",
+  ],
+  authors: [{ name: "Department of Software Engineering, SUST" }],
+  openGraph: {
+    title: "Student Dashboard",
+    description:
+      "Access your academic records, course information, and departmental updates on the SUST Software Engineering Student Dashboard.",
+    url: "https://dash-swe.onrender.com",
+    siteName: "Student Dashboard",
+    locale: "en_US",
+    type: "website",
+  },
 };
 
 export default function RootLayout({

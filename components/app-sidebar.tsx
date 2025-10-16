@@ -2,13 +2,14 @@
 
 import * as React from "react"
 import {
-  Bot,
-  Frame,
-  Map,
+  GraduationCap,
+  LayoutDashboard,
   PieChart,
   Settings2,
-  SquareTerminal,
+  SquareUserRound,
+  UserRoundPen,
   Users,
+  UserSearch,
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -49,7 +50,7 @@ export function AppSidebar({
     {
       title: "Student Info",
       url: '#',
-      icon: SquareTerminal,
+      icon: UserRoundPen,
       items: [
         { title: "Update", url: "/info-update" },
       ],
@@ -58,7 +59,7 @@ export function AppSidebar({
     {
       title: "Courses",
       url: '#',
-      icon: Bot,
+      icon: GraduationCap,
       items: [
         { title: "Add Courses", url: "/courses" },
         { title: "Grade Update", url: "/courses/gradeupdate" },
@@ -84,15 +85,15 @@ export function AppSidebar({
   const navMain = navMainItems.filter(item => permission >= (item.minPermission ?? 0))
 
   const projects = [
-    { name: "Dashboard", url: "/dashboard", icon: Frame },
-    { name: "Search Users", url: "/search", icon: Map },
+    { name: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
+    { name: "Search Users", url: "/search", icon: UserSearch },
     { name: "Results", url: "/results", icon: PieChart },
   ]
 
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="flex items-center gap-2">
-        <Users className="h-5 w-5 mt-6" />
+        <SquareUserRound className="h-5 w-5 mt-6" />
       </SidebarHeader>
       <SidebarContent>
         <NavProjects projects={projects} />
