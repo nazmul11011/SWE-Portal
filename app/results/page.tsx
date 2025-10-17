@@ -83,12 +83,29 @@ export default async function ResultsPage() {
             partb: orps?.partb ?? "N/A",
         };
     });
+
     const groupedBySemester: Record<string, typeof merged> = {};
     for (const row of merged) {
         if (!groupedBySemester[row.semester]) {
             groupedBySemester[row.semester] = [];
         }
         groupedBySemester[row.semester].push(row);
+    }
+
+    // Calculate semester-wise CGPA
+    const semesterCgpa: Record<string, number> = {};
+    for (const [semester, rows] of Object.entries(groupedBySemester)) {
+        let totalCredits = 0;
+        let totalPoints = 0;
+
+        for (const row of rows) {
+            const grade = parseFloat(row.grade);
+            if (!isNaN(grade)) {
+                totalCredits += row.credit;
+                totalPoints += grade * row.credit;
+            }
+        }
+        semesterCgpa[semester] = totalCredits > 0 ? totalPoints / totalCredits : 0;
     }
 
     return (
@@ -172,7 +189,7 @@ export default async function ResultsPage() {
                                 {merged.length === 0 ? (
                                     <p>No result data available.</p>
                                 ) : (
-                                    <Table>
+                                    <Table className="border">
                                         <TableHeader>
                                             <TableRow>
                                                 <TableHead>Code</TableHead>
@@ -200,6 +217,13 @@ export default async function ResultsPage() {
                                                     <TableCell>{row.grade}</TableCell>
                                                 </TableRow>
                                             ))}
+
+                                            <TableRow className="font-semibold">
+                                                <TableCell colSpan={8} className="text-left">Semester CGPA</TableCell>
+                                                <TableCell>
+                                                    {semesterCgpa[semester] > 0 ? semesterCgpa[semester].toFixed(2) : "N/A"}
+                                                </TableCell>
+                                            </TableRow>
                                         </TableBody>
                                     </Table>
                                 )}
